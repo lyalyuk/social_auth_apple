@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\social_auth_apple\Controller;
+namespace Drupal\no_module\Controller;
 
 use Drupal\Component\Plugin\Exception\PluginException;
 use Drupal\Component\Serialization\Json;

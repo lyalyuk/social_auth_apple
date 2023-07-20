@@ -1,19 +1,12 @@
 <?php
 
 namespace Drupal\social_auth_apple\Settings;
+use Drupal\social_auth\Settings\SettingsInterface;
 
 /**
  * Defines an interface for Social Auth Apple settings.
  */
-interface AppleAuthSettingsInterface {
-
-  /**
-   * Gets the client ID.
-   *
-   * @return string
-   *   The client ID.
-   */
-  public function getClientId();
+interface AppleAuthSettingsInterface extends SettingsInterface{
 
   /**
    * Gets the team ID.

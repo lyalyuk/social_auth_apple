@@ -36,7 +36,7 @@ function social_auth_apple_requirements($phase) {
  * will be used as a link in the 'Social Auth Login Block'.
  */
 function social_auth_apple_install() {
-  SocialAuthController::setLoginButtonSettings('social_auth_apple', 'social_auth_apple.redirect_to_provider', 'img/apple_logo.svg');
+  //SocialAuthController::setLoginButtonSettings('social_auth_apple', 'social_auth_apple.redirect_to_provider', 'img/apple_logo.svg');
 }
 
 /**
@@ -51,5 +51,5 @@ function social_auth_apple_install() {
  * building.
  */
 function social_auth_apple_uninstall() {
-  SocialAuthController::deleteLoginButtonSettings('social_auth_apple');
+  //SocialAuthController::deleteLoginButtonSettings('social_auth_apple');
 }

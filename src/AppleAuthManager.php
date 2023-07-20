@@ -5,6 +5,7 @@ namespace Drupal\social_auth_apple;
 use Drupal\Core\Config\ConfigFactory;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\social_auth\AuthManager\OAuth2Manager;
+use Drupal\social_auth\User\SocialAuthUserInterface;
 use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -42,7 +43,7 @@ class AppleAuthManager extends OAuth2Manager {
    * Once the user authorizes the app, the provider returns an authorization
    * code. This method exchanges this code for a token.
    */
-  public function authenticate() {
+  public function authenticate(): void {
     try {
       $this->setAccessToken(
         $this->client->getAccessToken(
@@ -64,7 +65,7 @@ class AppleAuthManager extends OAuth2Manager {
    * library we're using (The League) abstracts us from this implementation by
    * providing the method getResourceOwner.
    */
-  public function getUserInfo() {
+  public function getUserInfo():? SocialAuthUserInterface {
     if (!$this->user) {
       $this->user = $this->client->getResourceOwner($this->getAccessToken());
     }
@@ -79,7 +80,7 @@ class AppleAuthManager extends OAuth2Manager {
    * authentication. This URL often includes the scopes we want to request from
    * the provider.
    */
-  public function getAuthorizationUrl() {
+  public function getAuthorizationUrl(): string  {
     $scopes = [
       'name',
       'email',
@@ -115,7 +116,7 @@ class AppleAuthManager extends OAuth2Manager {
    *
    * @see \Drupal\social_auth\AuthManager\OAuth2Manager::getExtraDetails
    */
-  public function requestEndPoint($method, $path, $domain = NULL, array $options = []) {
+  public function requestEndPoint($method, $path, $domain = NULL, array $options = []): mixed {
     if (!$domain) {
       $domain = 'https://appleid.apple.com';
     }
@@ -138,7 +139,7 @@ class AppleAuthManager extends OAuth2Manager {
   /**
    * {@inheritdoc}
    */
-  public function getState() {
+  public function getState(): string {
     return $this->client->getState();
   }
 

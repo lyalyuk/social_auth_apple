@@ -5,8 +5,9 @@ namespace Drupal\social_auth_apple\Plugin\Network;
 use Drupal\Core\Url;
 use Drupal\social_api\SocialApiException;
 use Drupal\social_auth\Plugin\Network\NetworkBase;
-use Drupal\social_auth_apple\Settings\AppleAuthSettings;
+use Drupal\social_auth\Settings\SettingsInterface;
 use League\OAuth2\Client\Provider\Apple;
+use Drupal\social_auth\Plugin\Network\NetworkInterface;
 
 /**
  * Defines Social Auth Apple Network Plugin.
@@ -15,6 +16,16 @@ use League\OAuth2\Client\Provider\Apple;
  *   id = "social_auth_apple",
  *   social_network = "Apple",
  *   type = "social_auth",
+ *   short_name = "apple",
+ *   img_path = "img/apple_logo.svg",
+ *   type = "social_auth",
+ *   class_name = "\League\OAuth2\Client\Provider\Apple",
+ *   auth_manager = "\Drupal\social_auth_apple\AppleAuthManager",
+ *   routes = {
+ *     "redirect": "social_auth.network.redirect",
+ *     "callback": "social_auth.network.callback",
+ *     "settings_form": "social_auth.network.settings_form",
+ *   },
  *   handlers = {
  *      "settings": {
  *          "class": "\Drupal\social_auth_apple\Settings\AppleAuthSettings",
@@ -23,7 +34,7 @@ use League\OAuth2\Client\Provider\Apple;
  *   }
  * )
  */
-class AppleAuth extends NetworkBase {
+class AppleAuth extends NetworkBase implements NetworkInterface {
 
   /**
    * {@inheritdoc}
@@ -33,16 +44,15 @@ class AppleAuth extends NetworkBase {
    * The returning value of this method is what is returned when an instance of
    * this Network Plugin called the getSdk method.
    *
-   * @see \Drupal\social_auth_apple\Controller\AppleAuthController::callback
    * @see \Drupal\social_auth\Controller\OAuth2ControllerBase::processCallback
    */
-  public function initSdk() {
+  public function initSdk(): mixed {
     $class_name = '\League\OAuth2\Client\Provider\Apple';
     if (!class_exists($class_name)) {
       throw new SocialApiException(sprintf('The Apple library for PHP League OAuth2 not found. Class: %s.', $class_name));
     }
 
-    /** @var \Drupal\social_auth_apple\Settings\AppleAuthSettings $settings */
+    /** @var \Drupal\social_auth\Settings\SettingsInterface $settings */
     $settings = $this->settings;
 
     if ($this->validateConfig($settings)) {
@@ -70,14 +80,14 @@ class AppleAuth extends NetworkBase {
   /**
    * Checks that module is configured.
    *
-   * @param \Drupal\social_auth_apple\Settings\AppleAuthSettings $settings
+   * @param \Drupal\social_auth\Settings\SettingsInterface $settings
    *   The implementer authentication settings.
    *
    * @return bool
    *   True if module is configured.
    *   False otherwise.
    */
-  protected function validateConfig(AppleAuthSettings $settings) {
+  protected function validateConfig(SettingsInterface $settings): bool {
     $client_id = $settings->getClientId();
     $team_id = $settings->getTeamId();
     $key_file_id = $settings->getKeyFileId();

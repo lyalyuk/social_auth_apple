@@ -18,35 +18,35 @@ class AppleAuthSettings extends SettingsBase implements AppleAuthSettingsInterfa
   /**
    * Client ID.
    *
-   * @var string
+   * @var string|null
    */
-  protected $clientId;
+  protected ?string $clientId;
 
   /**
    * Team ID.
    *
-   * @var string
+   * @var string|null
    */
-  protected $teamId;
+  protected ?string $teamId;
 
   /**
    * Key File ID.
    *
-   * @var string
+   * @var string|string
    */
-  protected $keyFileId;
+  protected ?string $keyFileId;
 
   /**
    * Key File Path.
    *
-   * @var string
+   * @var string|string
    */
-  protected $keyFilePath;
+  protected ?string $keyFilePath;
 
   /**
    * {@inheritdoc}
    */
-  public function getClientId() {
+  public function getClientId(): string|null {
     if (!$this->clientId) {
       $this->clientId = $this->config->get('client_id');
     }
@@ -56,7 +56,7 @@ class AppleAuthSettings extends SettingsBase implements AppleAuthSettingsInterfa
   /**
    * {@inheritdoc}
    */
-  public function getTeamId() {
+  public function getTeamId(): string|null {
     if (!$this->teamId) {
       $this->teamId = $this->config->get('team_id');
     }
@@ -66,7 +66,7 @@ class AppleAuthSettings extends SettingsBase implements AppleAuthSettingsInterfa
   /**
    * GetKeyFileId.
    */
-  public function getKeyFileId() {
+  public function getKeyFileId(): string|null {
     if (!$this->keyFileId) {
       $this->keyFileId = $this->config->get('key_file_id');
     }
@@ -76,7 +76,7 @@ class AppleAuthSettings extends SettingsBase implements AppleAuthSettingsInterfa
   /**
    * GetKeyFilePath.
    */
-  public function getKeyFilePath() {
+  public function getKeyFilePath(): string|null {
     if (!$this->keyFilePath) {
       $this->keyFilePath = $this->config->get('key_file_path');
     }
