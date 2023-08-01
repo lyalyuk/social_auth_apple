@@ -3,7 +3,6 @@
 namespace Drupal\social_auth_apple\Form;
 
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Url;
 use Drupal\social_auth\Form\SocialAuthSettingsForm;
 use Drupal\social_auth\Plugin\Network\NetworkInterface;
 
@@ -35,6 +34,9 @@ class AppleAuthSettingsForm extends SocialAuthSettingsForm {
     $network = $this->networkManager->createInstance('social_auth_apple');
     $form = parent::buildForm($form, $form_state, $network);
 
+    // Disable client_secret field because it is not available in Apple.
+    $form['network']['client_secret']['#type'] = 'value';
+
     $form['network']['team_id'] = [
       '#type' => 'textfield',
       '#required' => TRUE,
@@ -56,10 +58,8 @@ class AppleAuthSettingsForm extends SocialAuthSettingsForm {
       '#required' => TRUE,
       '#title' => $this->t('Key File Path'),
       '#default_value' => $config->get('key_file_path'),
-      '#description' => $this->t('Path to the key file relative to the website root. (f.ex. oauth/HGNHTBYZB7.p8)'),
+      '#description' => $this->t('Path to the key file relative to the file system root. (f.ex. /var/www/oauth/HGNHTBYZB7.p8)'),
     ];
-
-
     return $form;
   }
 
@@ -73,7 +73,7 @@ class AppleAuthSettingsForm extends SocialAuthSettingsForm {
       ->set('client_id', $values['client_id'])
       ->set('team_id', $values['team_id'])
       ->set('key_file_id', $values['key_file_id'])
-      ->set('key_file_path', ltrim($values['key_file_path'], '/'))
+      ->set('key_file_path', $values['key_file_path'])
       ->save();
 
     parent::submitForm($form, $form_state);

@@ -47,9 +47,9 @@ class AppleAuth extends NetworkBase implements NetworkInterface {
    * @see \Drupal\social_auth\Controller\OAuth2ControllerBase::processCallback
    */
   public function initSdk(): mixed {
-    $class_name = '\League\OAuth2\Client\Provider\Apple';
-    if (!class_exists($class_name)) {
-      throw new SocialApiException(sprintf('The Apple library for PHP League OAuth2 not found. Class: %s.', $class_name));
+    $network = $this->networkManager->getDefinition($this->pluginId);
+    if (!class_exists($network['class_name'])) {
+      throw new SocialApiException(sprintf('The Apple library for PHP League OAuth2 not found. Class: %s.', $network['class_name']));
     }
 
     /** @var \Drupal\social_auth\Settings\SettingsInterface $settings */
@@ -61,7 +61,7 @@ class AppleAuth extends NetworkBase implements NetworkInterface {
         'clientId' => $settings->getClientId(),
         'teamId' => $settings->getTeamId(),
         'keyFileId' => $settings->getKeyFileId(),
-        'keyFilePath' => DRUPAL_ROOT . '/../' . $settings->getKeyFilePath(),
+        'keyFilePath' => $settings->getKeyFilePath(),
         'redirectUri' => Url::fromRoute('social_auth_apple.callback')->setAbsolute()->toString(),
       ];
 
@@ -71,10 +71,10 @@ class AppleAuth extends NetworkBase implements NetworkInterface {
         $league_settings['proxy'] = !empty($proxy_config['proxy']['http']) ? $proxy_config['proxy']['http'] : NULL;
       }
 
-      return new Apple($league_settings);
+      return new $network['class_name']($league_settings);
     }
 
-    return FALSE;
+    throw new SocialApiException('Module configuration validation failed -- verify client ID and secret settings.');
   }
 
   /**
@@ -91,7 +91,7 @@ class AppleAuth extends NetworkBase implements NetworkInterface {
     $client_id = $settings->getClientId();
     $team_id = $settings->getTeamId();
     $key_file_id = $settings->getKeyFileId();
-    $key_file_path = $settings->getKeyFilePath();
+    $key_file_path = file_exists($settings->getKeyFilePath());
     if (!$client_id || !$team_id || !$key_file_id || !$key_file_path) {
       $this->loggerFactory
         ->get('social_auth_apple')

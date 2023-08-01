@@ -20,28 +20,28 @@ class AppleAuthSettings extends SettingsBase implements AppleAuthSettingsInterfa
    *
    * @var string|null
    */
-  protected ?string $clientId;
+  protected ?string $clientId = NULL;
 
   /**
    * Team ID.
    *
    * @var string|null
    */
-  protected ?string $teamId;
+  protected ?string $teamId = NULL;
 
   /**
    * Key File ID.
    *
-   * @var string|string
+   * @var string|null
    */
-  protected ?string $keyFileId;
+  protected ?string $keyFileId = NULL;
 
   /**
    * Key File Path.
    *
-   * @var string|string
+   * @var string|null
    */
-  protected ?string $keyFilePath;
+  protected ?string $keyFilePath = NULL;
 
   /**
    * {@inheritdoc}
