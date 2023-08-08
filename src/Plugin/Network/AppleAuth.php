@@ -60,6 +60,7 @@ class AppleAuth extends NetworkBase implements NetworkInterface {
         'teamId' => $settings->getTeamId(),
         'keyFileId' => $settings->getKeyFileId(),
         'keyFilePath' => $settings->getKeyFilePath(),
+        'redirectUri' => $this->getCallbackUrl()->setAbsolute()->toString(),
       ];
 
       // Proxy configuration data for outward proxy.
