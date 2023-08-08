@@ -2,11 +2,9 @@
 
 namespace Drupal\social_auth_apple\Plugin\Network;
 
-use Drupal\Core\Url;
 use Drupal\social_api\SocialApiException;
 use Drupal\social_auth\Plugin\Network\NetworkBase;
 use Drupal\social_auth\Settings\SettingsInterface;
-use League\OAuth2\Client\Provider\Apple;
 use Drupal\social_auth\Plugin\Network\NetworkInterface;
 
 /**
@@ -62,7 +60,6 @@ class AppleAuth extends NetworkBase implements NetworkInterface {
         'teamId' => $settings->getTeamId(),
         'keyFileId' => $settings->getKeyFileId(),
         'keyFilePath' => $settings->getKeyFilePath(),
-        'redirectUri' => Url::fromRoute('social_auth_apple.callback')->setAbsolute()->toString(),
       ];
 
       // Proxy configuration data for outward proxy.
