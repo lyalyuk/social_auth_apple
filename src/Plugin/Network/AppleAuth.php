@@ -6,6 +6,7 @@ use Drupal\social_api\SocialApiException;
 use Drupal\social_auth\Plugin\Network\NetworkBase;
 use Drupal\social_auth\Settings\SettingsInterface;
 use Drupal\social_auth\Plugin\Network\NetworkInterface;
+use Firebase\JWT\JWT;
 
 /**
  * Defines Social Auth Apple Network Plugin.
@@ -32,6 +33,9 @@ use Drupal\social_auth\Plugin\Network\NetworkInterface;
  *   }
  * )
  */
+// $leeway is needed for clock skew
+JWT::$leeway = 300;
+
 class AppleAuth extends NetworkBase implements NetworkInterface {
 
   /**
