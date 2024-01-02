@@ -5,6 +5,7 @@ namespace Drupal\social_auth_apple;
 use Drupal\Core\Config\ConfigFactory;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\social_auth\AuthManager\OAuth2Manager;
+use Drupal\social_auth\User\SocialAuthUser;
 use Drupal\social_auth\User\SocialAuthUserInterface;
 use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -67,7 +68,16 @@ class AppleAuthManager extends OAuth2Manager {
    */
   public function getUserInfo():? SocialAuthUserInterface {
     if (!$this->user) {
-      $this->user = $this->client->getResourceOwner($this->getAccessToken());
+      /** @var \League\OAuth2\Client\Provider\AppleResourceOwner $owner */
+      $owner = $this->client->getResourceOwner($this->getAccessToken());
+      $this->user = new SocialAuthUser(
+        strstr($owner->getEmail(), '@', true),
+        $owner->getId(),
+        $this->getAccessToken(),
+        $owner->getEmail(),
+      );
+      $this->user->setFirstName($owner->getFirstName());
+      $this->user->setLastName($owner->getLastName());
     }
 
     return $this->user;
